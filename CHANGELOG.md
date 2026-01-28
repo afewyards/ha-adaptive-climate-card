@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.1.0...v1.2.0) (2026-01-28)
+
+
+### Features
+
+* rename card to adaptive-thermostat-card and update README ([8e188bb](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/8e188bbe603051f1967c77d778c9318e5fa36855))
+
 # [1.1.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.0.0...v1.1.0) (2026-01-28)
 
 
