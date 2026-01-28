@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.4.0...v1.4.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* remove Babel output plugin causing class name mangling ([f69e91e](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/f69e91e29a5aaf791eae22c25b1b946d03811adf))
+
 # [1.4.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.3.0...v1.4.0) (2026-01-28)
 
 
