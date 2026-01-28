@@ -63,8 +63,8 @@ const CONTROLS_ICONS: Record<ClimateCardControl, string> = {
 
 registerCustomCard({
   type: CLIMATE_CARD_NAME,
-  name: "Mushroom Climate Card",
-  description: "Card for climate entity",
+  name: "Adaptive Thermostat Card",
+  description: "Card for Adaptive Thermostat",
 });
 
 @customElement(CLIMATE_CARD_NAME)
@@ -165,7 +165,7 @@ export class ClimateCard
     }
 
     const name = this._config.name || stateObj.attributes.friendly_name || "";
-    const icon = this._config.icon;
+    const icon = this._config.icon || "mdi:thermostat-box";
     const appearance = computeAppearance(this._config);
     const picture = computeEntityPicture(stateObj, appearance.icon_type);
 
