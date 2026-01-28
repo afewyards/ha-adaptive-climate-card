@@ -1,3 +1,11 @@
+# [1.5.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.4.1...v1.5.0) (2026-01-28)
+
+
+### Features
+
+* restrict card to adaptive_thermostat integration only ([d9577cd](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/d9577cd82904602154fafd5fbef7c59870c69287))
+* show original target temp during night setback ([4ed8eff](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/4ed8effff3c47ac6c4c456c32e934b85ecdf7fe1))
+
 ## [1.4.1](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.4.0...v1.4.1) (2026-01-28)
 
 
