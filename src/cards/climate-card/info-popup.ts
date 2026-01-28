@@ -10,22 +10,22 @@ import {
 } from "./utils";
 
 interface AdaptiveAttributes {
+  // Status object contains conditions and night setback info
   status?: {
     conditions?: string[];
-    learning_status?: string;
-    cycles_collected?: number;
-    convergence_confidence_pct?: number;
-  };
-  pid?: {
-    kp?: number;
-    ki?: number;
-    kd?: number;
-    control_output?: number;
-  };
-  night_setback?: {
     setback_delta?: number;
     setback_end?: string;
   };
+  // PID values are flat on attributes
+  kp?: number;
+  ki?: number;
+  kd?: number;
+  control_output?: number;
+  // Learning values are flat on attributes
+  learning_status?: string;
+  cycles_collected?: number;
+  convergence_confidence_pct?: number;
+  // Environment and statistics
   outdoor_temp_lagged?: number;
   heater_cycle_count?: number;
   cooler_cycle_count?: number;
@@ -127,41 +127,42 @@ export class ClimateInfoPopup extends LitElement {
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult | typeof nothing {
-    const pid = attrs.pid;
-    if (!pid) return nothing;
+    if (attrs.kp === undefined && attrs.ki === undefined && attrs.kd === undefined) {
+      return nothing;
+    }
 
     return html`
       <section>
         <h3>${localize("card.info_popup.pid_controller")}</h3>
-        ${pid.kp !== undefined
+        ${attrs.kp !== undefined
           ? html`
               <div class="row">
                 <span class="label">Kp</span>
-                <span class="value">${this._formatNumber(pid.kp)}</span>
+                <span class="value">${this._formatNumber(attrs.kp)}</span>
               </div>
             `
           : nothing}
-        ${pid.ki !== undefined
+        ${attrs.ki !== undefined
           ? html`
               <div class="row">
                 <span class="label">Ki</span>
-                <span class="value">${this._formatNumber(pid.ki)}</span>
+                <span class="value">${this._formatNumber(attrs.ki)}</span>
               </div>
             `
           : nothing}
-        ${pid.kd !== undefined
+        ${attrs.kd !== undefined
           ? html`
               <div class="row">
                 <span class="label">Kd</span>
-                <span class="value">${this._formatNumber(pid.kd)}</span>
+                <span class="value">${this._formatNumber(attrs.kd)}</span>
               </div>
             `
           : nothing}
-        ${pid.control_output !== undefined
+        ${attrs.control_output !== undefined
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.control_output")}</span>
-                <span class="value">${this._formatNumber(pid.control_output)}%</span>
+                <span class="value">${this._formatNumber(attrs.control_output)}%</span>
               </div>
             `
           : nothing}
@@ -173,29 +174,28 @@ export class ClimateInfoPopup extends LitElement {
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult | typeof nothing {
-    const status = attrs.status;
-    if (!status?.learning_status) return nothing;
+    if (!attrs.learning_status) return nothing;
 
     return html`
       <section>
         <h3>${localize("card.info_popup.learning")}</h3>
         <div class="row">
           <span class="label">${localize("card.info_popup.learning_status")}</span>
-          <span class="value">${status.learning_status}</span>
+          <span class="value">${attrs.learning_status}</span>
         </div>
-        ${status.cycles_collected !== undefined
+        ${attrs.cycles_collected !== undefined
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.cycles_collected")}</span>
-                <span class="value">${status.cycles_collected}</span>
+                <span class="value">${attrs.cycles_collected}</span>
               </div>
             `
           : nothing}
-        ${status.convergence_confidence_pct !== undefined
+        ${attrs.convergence_confidence_pct !== undefined
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.convergence")}</span>
-                <span class="value">${status.convergence_confidence_pct}%</span>
+                <span class="value">${attrs.convergence_confidence_pct}%</span>
               </div>
             `
           : nothing}
@@ -207,28 +207,28 @@ export class ClimateInfoPopup extends LitElement {
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult | typeof nothing {
-    const nightSetback = attrs.night_setback;
-    const conditions = attrs.status?.conditions ?? [];
+    const status = attrs.status;
+    const conditions = status?.conditions ?? [];
 
     // Only show when night setback is active
-    if (!nightSetback || !conditions.includes("night_setback")) return nothing;
+    if (!conditions.includes("night_setback")) return nothing;
 
     return html`
       <section>
         <h3>${localize("card.info_popup.night_setback")}</h3>
-        ${nightSetback.setback_delta !== undefined
+        ${status?.setback_delta !== undefined
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.setback_delta")}</span>
-                <span class="value">${nightSetback.setback_delta}°</span>
+                <span class="value">${status.setback_delta}°</span>
               </div>
             `
           : nothing}
-        ${nightSetback.setback_end
+        ${status?.setback_end
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.setback_end")}</span>
-                <span class="value">${nightSetback.setback_end}</span>
+                <span class="value">${this._formatTime(status.setback_end)}</span>
               </div>
             `
           : nothing}
@@ -291,6 +291,18 @@ export class ClimateInfoPopup extends LitElement {
     return value.toLocaleString(this.hass?.locale?.language ?? "en", {
       maximumFractionDigits: 2,
     });
+  }
+
+  private _formatTime(isoString: string): string {
+    try {
+      const date = new Date(isoString);
+      return date.toLocaleTimeString(this.hass?.locale?.language ?? "en", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return isoString;
+    }
   }
 
   static get styles(): CSSResultGroup {
