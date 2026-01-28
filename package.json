@@ -1,6 +1,6 @@
 {
   "name": "adaptive-thermostat-card",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Adaptive Thermostat Card for Home Assistant",
   "main": "index.js",
   "scripts": {

@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.6.1...v1.6.2) (2026-01-28)
+
+
+### Bug Fixes
+
+* night setback temp display and editing ([aa0b944](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/aa0b9444455f14ad235831da726a5188dfd30b69))
+
 ## [1.6.1](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.6.0...v1.6.1) (2026-01-28)
 
 
