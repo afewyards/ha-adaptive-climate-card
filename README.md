@@ -2,6 +2,12 @@
 
 A Home Assistant Lovelace card for the [Adaptive Thermostat](https://github.com/afewyards/ha-adaptive-thermostat) integration. Based on [lovelace-mushroom](https://github.com/piitaya/lovelace-mushroom) by piitaya.
 
+## Requires
+
+This card is designed for the [Adaptive Thermostat](https://github.com/afewyards/ha-adaptive-thermostat) integration.
+
+[![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/afewyards/ha-adaptive-thermostat)
+
 ## Features
 
 - Temperature control with +/- buttons
