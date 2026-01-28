@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.2.0...v1.3.0) (2026-01-28)
+
+
+### Features
+
+* use mdi:thermostat-box as default icon ([616b5aa](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/616b5aaa7e617ae933eeef620dbd74cbb4fab5c7))
+
 # [1.2.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.1.0...v1.2.0) (2026-01-28)
 
 
