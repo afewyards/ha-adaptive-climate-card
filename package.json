@@ -9,12 +9,13 @@
     "format": "prettier --write .",
     "start:hass-stable": "docker run --rm -p8123:8123 -v ./.hass_dev:/config homeassistant/home-assistant:stable",
     "start:hass": "docker run --rm -p8123:8123 -v ./.hass_dev:/config homeassistant/home-assistant:beta",
-    "start:hass-dev": "docker run --rm -p8123:8123 -v ./.hass_dev:/config homeassistant/home-assistant:dev"
+    "start:hass-dev": "docker run --rm -p8123:8123 -v ./.hass_dev:/config homeassistant/home-assistant:dev",
+    "release": "semantic-release"
   },
   "author": "Paul Bottein",
   "repository": {
     "type": "git",
-    "url": "https://github.com/piitaya/lovelace-mushroom"
+    "url": "https://github.com/afewyards/adaptive-thermostat-card"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -46,6 +47,10 @@
     "prettier": "^3.6.2",
     "rollup": "^4.50.1",
     "rollup-plugin-serve": "^1.1.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "semantic-release": "^24.0.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^10.0.0",
+    "@semantic-release/changelog": "^6.0.3"
   }
 }
