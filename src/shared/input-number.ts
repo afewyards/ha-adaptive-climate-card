@@ -49,6 +49,9 @@ export class InputNumber extends LitElement {
   @property({ attribute: false })
   public formatOptions: Intl.NumberFormatOptions = {};
 
+  @property({ attribute: false, type: Number })
+  public secondaryValue?: number;
+
   @state() pending = false;
 
   private get _precision() {
@@ -112,6 +115,11 @@ export class InputNumber extends LitElement {
         ? formatNumber(this.value, this.locale, this.formatOptions)
         : "-";
 
+    const secondaryValue =
+      this.secondaryValue != null
+        ? formatNumber(this.secondaryValue, this.locale, this.formatOptions)
+        : null;
+
     return html`
       <div class="container" id="container">
         <button
@@ -121,15 +129,20 @@ export class InputNumber extends LitElement {
         >
           <ha-icon icon="mdi:minus"></ha-icon>
         </button>
-        <span
-          class=${classMap({
-            value: true,
-            pending: this.pending,
-            disabled: this.disabled,
-          })}
-        >
-          ${value}
-        </span>
+        <div class="value-container">
+          <span
+            class=${classMap({
+              value: true,
+              pending: this.pending,
+              disabled: this.disabled,
+            })}
+          >
+            ${value}
+          </span>
+          ${secondaryValue != null
+            ? html`<span class="secondary-value">${secondaryValue}</span>`
+            : ""}
+        </div>
         <button
           class="button plus"
           @click=${this._incrementValue}
@@ -201,11 +214,19 @@ export class InputNumber extends LitElement {
       .button:disabled ha-icon {
         color: var(--icon-color-disabled);
       }
-      .value {
-        text-align: center;
+      .value-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         flex-grow: 1;
         flex-shrink: 0;
         flex-basis: 20px;
+        gap: 0;
+        line-height: 1.1;
+      }
+      .value {
+        text-align: center;
         font-weight: bold;
         color: var(--text-color);
       }
@@ -214,6 +235,13 @@ export class InputNumber extends LitElement {
       }
       .value.pending {
         opacity: 0.5;
+      }
+      .secondary-value {
+        text-align: center;
+        font-size: 0.7em;
+        color: var(--secondary-text-color);
+        opacity: 0.7;
+        margin-top: 2px;
       }
     `;
   }

@@ -59,6 +59,20 @@ export class ClimateTemperatureControl extends LitElement {
     });
   }
 
+  private get _nightSetbackInfo(): { active: boolean; originalTarget: number | null } {
+    const status = (this.entity.attributes as any).status;
+    if (status?.conditions?.includes("night_setback") && status.setback_delta != null) {
+      const currentTarget = this.entity.attributes.temperature;
+      if (currentTarget != null) {
+        return {
+          active: true,
+          originalTarget: currentTarget + status.setback_delta,
+        };
+      }
+    }
+    return { active: false, originalTarget: null };
+  }
+
   protected render(): TemplateResult {
     const rtl = computeRTL(this.hass);
 
@@ -80,6 +94,8 @@ export class ClimateTemperatureControl extends LitElement {
       "--text-color": `rgb(var(--rgb-state-climate-${mode}))`,
     });
 
+    const nightSetback = this._nightSetbackInfo;
+
     return html`
       <adaptive-button-group .fill=${this.fill} ?rtl=${rtl}>
         ${this.entity.attributes.temperature != null
@@ -87,6 +103,7 @@ export class ClimateTemperatureControl extends LitElement {
               <adaptive-input-number
                 .locale=${this.hass.locale}
                 .value=${this.entity.attributes.temperature}
+                .secondaryValue=${nightSetback.originalTarget}
                 .step=${this._stepSize}
                 .min=${this.entity.attributes.min_temp}
                 .max=${this.entity.attributes.max_temp}
