@@ -18,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/afewyards/adaptive-thermostat-card"
+    "url": "https://github.com/afewyards/ha-adaptive-thermostat-card"
   },
   "license": "Apache-2.0",
   "dependencies": {
