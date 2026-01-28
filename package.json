@@ -12,7 +12,10 @@
     "start:hass-dev": "docker run --rm -p8123:8123 -v ./.hass_dev:/config homeassistant/home-assistant:dev",
     "release": "semantic-release"
   },
-  "author": "Paul Bottein",
+  "author": "Thierry Michel Philippe Kleist",
+  "contributors": [
+    "Paul Bottein (original lovelace-mushroom author)"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/afewyards/adaptive-thermostat-card"
