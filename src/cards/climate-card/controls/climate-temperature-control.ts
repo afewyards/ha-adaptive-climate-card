@@ -34,10 +34,11 @@ export class ClimateTemperatureControl extends LitElement {
   }
 
   onValueChange(e: CustomEvent<{ value: number }>): void {
-    const value = e.detail.value;
+    // User sets daytime temp directly - no delta conversion needed
+    // The integration handles night setback adjustment internally
     this.hass!.callService("climate", "set_temperature", {
       entity_id: this.entity.entity_id,
-      temperature: value,
+      temperature: e.detail.value,
     });
   }
 
@@ -59,18 +60,23 @@ export class ClimateTemperatureControl extends LitElement {
     });
   }
 
-  private get _nightSetbackInfo(): { active: boolean; originalTarget: number | null } {
+  private get _nightSetbackInfo(): {
+    active: boolean;
+    nightTarget: number | null;
+    daytimeTarget: number | null;
+  } {
     const status = (this.entity.attributes as any).status;
     if (status?.conditions?.includes("night_setback") && status.setback_delta != null) {
-      const currentTarget = this.entity.attributes.temperature;
-      if (currentTarget != null) {
+      const daytimeTarget = this.entity.attributes.temperature;
+      if (daytimeTarget != null) {
         return {
           active: true,
-          originalTarget: currentTarget + status.setback_delta,
+          nightTarget: daytimeTarget - status.setback_delta,
+          daytimeTarget: daytimeTarget,
         };
       }
     }
-    return { active: false, originalTarget: null };
+    return { active: false, nightTarget: null, daytimeTarget: null };
   }
 
   protected render(): TemplateResult {
@@ -103,7 +109,8 @@ export class ClimateTemperatureControl extends LitElement {
               <adaptive-input-number
                 .locale=${this.hass.locale}
                 .value=${this.entity.attributes.temperature}
-                .secondaryValue=${nightSetback.originalTarget}
+                .secondaryValue=${nightSetback.nightTarget}
+                .swapDisplay=${nightSetback.active}
                 .step=${this._stepSize}
                 .min=${this.entity.attributes.min_temp}
                 .max=${this.entity.attributes.max_temp}

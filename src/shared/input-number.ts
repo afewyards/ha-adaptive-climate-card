@@ -52,6 +52,9 @@ export class InputNumber extends LitElement {
   @property({ attribute: false, type: Number })
   public secondaryValue?: number;
 
+  @property({ type: Boolean })
+  public swapDisplay: boolean = false;
+
   @state() pending = false;
 
   private get _precision() {
@@ -110,15 +113,20 @@ export class InputNumber extends LitElement {
   }
 
   protected render(): TemplateResult {
-    const value =
+    const valueFormatted =
       this.value != null
         ? formatNumber(this.value, this.locale, this.formatOptions)
         : "-";
 
-    const secondaryValue =
+    const secondaryFormatted =
       this.secondaryValue != null
         ? formatNumber(this.secondaryValue, this.locale, this.formatOptions)
         : null;
+
+    // When swapDisplay is true and secondary exists, show secondary as primary display
+    const shouldSwap = this.swapDisplay && secondaryFormatted != null;
+    const primaryDisplay = shouldSwap ? secondaryFormatted : valueFormatted;
+    const secondaryDisplay = shouldSwap ? valueFormatted : secondaryFormatted;
 
     return html`
       <div class="container" id="container">
@@ -137,10 +145,10 @@ export class InputNumber extends LitElement {
               disabled: this.disabled,
             })}
           >
-            ${value}
+            ${primaryDisplay}
           </span>
-          ${secondaryValue != null
-            ? html`<span class="secondary-value">${secondaryValue}</span>`
+          ${secondaryDisplay != null
+            ? html`<span class="secondary-value">${secondaryDisplay}</span>`
             : ""}
         </div>
         <button
