@@ -53,3 +53,47 @@ export function getHvacModeIcon(hvacMode: HvacMode): string {
 export function getHvacActionIcon(hvacAction: HvacAction): string | undefined {
   return CLIMATE_HVAC_ACTION_ICONS[hvacAction] ?? "";
 }
+
+// Adaptive thermostat condition icons
+export const ADAPTIVE_CONDITION_ICONS: Record<string, string> = {
+  contact_open: "mdi:window-open-variant",
+  humidity_spike: "mdi:shower",
+  night_setback: "mdi:weather-night",
+  open_window: "mdi:window-open-variant",
+  learning_grace: "mdi:brain",
+};
+
+// Adaptive condition colors (subtle, not too prominent)
+export const ADAPTIVE_CONDITION_COLORS: Record<string, string> = {
+  contact_open: "var(--rgb-amber)",
+  humidity_spike: "var(--rgb-blue)",
+  night_setback: "var(--rgb-purple)",
+  open_window: "var(--rgb-amber)",
+  learning_grace: "var(--rgb-green)",
+};
+
+// Priority order for conditions (first match wins)
+const CONDITION_PRIORITY = ["contact_open", "open_window", "humidity_spike", "night_setback", "learning_grace"];
+
+export function getAdaptiveConditionIcon(conditions: string[]): string | undefined {
+  for (const cond of CONDITION_PRIORITY) {
+    if (conditions.includes(cond)) {
+      return ADAPTIVE_CONDITION_ICONS[cond];
+    }
+  }
+  return undefined;
+}
+
+export function getAdaptiveConditionColor(conditions: string[]): string | undefined {
+  for (const cond of CONDITION_PRIORITY) {
+    if (conditions.includes(cond)) {
+      return ADAPTIVE_CONDITION_COLORS[cond];
+    }
+  }
+  return undefined;
+}
+
+// Check for away/vacation preset
+export function isAwayMode(presetMode: string | undefined): boolean {
+  return presetMode === "away" || presetMode === "vacation";
+}

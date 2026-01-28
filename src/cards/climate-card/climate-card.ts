@@ -49,6 +49,9 @@ import {
   getHvacActionColor,
   getHvacActionIcon,
   getHvacModeColor,
+  getAdaptiveConditionIcon,
+  getAdaptiveConditionColor,
+  isAwayMode,
 } from "./utils";
 
 type ClimateCardControl = "temperature_control" | "hvac_mode_control";
@@ -215,7 +218,13 @@ export class ClimateCard
 
   protected renderIcon(stateObj: ClimateEntity, icon?: string): TemplateResult {
     const available = isAvailable(stateObj);
-    const color = getHvacModeColor(stateObj.state as HvacMode);
+
+    // Use hvac_action for background color (shows actual heating/cooling state)
+    const hvacAction = stateObj.attributes.hvac_action;
+    const color = hvacAction && hvacAction !== "idle" && hvacAction !== "off"
+      ? getHvacActionColor(hvacAction)
+      : getHvacModeColor(stateObj.state as HvacMode);
+
     const iconStyle = {};
     iconStyle["--icon-color"] = `rgb(${color})`;
     iconStyle["--shape-color"] = `rgba(${color}, 0.2)`;
@@ -239,29 +248,55 @@ export class ClimateCard
     const unavailable = !isAvailable(entity);
     if (unavailable) {
       return super.renderBadge(entity);
-    } else {
-      return this.renderActionBadge(entity);
     }
+
+    // Check for adaptive thermostat conditions first
+    const adaptiveBadge = this.renderAdaptiveBadge(entity);
+    if (adaptiveBadge) {
+      return adaptiveBadge;
+    }
+
+    // Fall back to showing nothing (action now shown via circle color)
+    return nothing;
   }
 
-  renderActionBadge(entity: ClimateEntity) {
-    const hvac_action = entity.attributes.hvac_action;
-    if (!hvac_action || hvac_action == "off") return nothing;
+  renderAdaptiveBadge(entity: ClimateEntity) {
+    // Get status.conditions from entity attributes
+    const entityAttrs = entity.attributes as any;
+    const status = entityAttrs.status as { conditions?: string[] } | undefined;
+    const conditions = status?.conditions ?? [];
+    const presetMode = entity.attributes.preset_mode;
 
-    const color = getHvacActionColor(hvac_action);
-    const icon = getHvacActionIcon(hvac_action);
+    // Check away/vacation mode
+    if (isAwayMode(presetMode)) {
+      return html`
+        <mushroom-badge-icon
+          slot="badge"
+          .icon=${"mdi:airplane"}
+          style=${styleMap({
+            "--main-color": "rgb(var(--rgb-purple))",
+          })}
+        ></mushroom-badge-icon>
+      `;
+    }
 
-    if (!icon) return nothing;
+    // Check adaptive conditions
+    const conditionIcon = getAdaptiveConditionIcon(conditions);
+    const conditionColor = getAdaptiveConditionColor(conditions);
 
-    return html`
-      <mushroom-badge-icon
-        slot="badge"
-        .icon=${icon}
-        style=${styleMap({
-          "--main-color": `rgb(${color})`,
-        })}
-      ></mushroom-badge-icon>
-    `;
+    if (conditionIcon && conditionColor) {
+      return html`
+        <mushroom-badge-icon
+          slot="badge"
+          .icon=${conditionIcon}
+          style=${styleMap({
+            "--main-color": `rgb(${conditionColor})`,
+          })}
+        ></mushroom-badge-icon>
+      `;
+    }
+
+    return nothing;
   }
 
   private renderOtherControls(): TemplateResult | null {
