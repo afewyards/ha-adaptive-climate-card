@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.7.0...v1.7.1) (2026-01-29)
+
+
+### Bug Fixes
+
+* show idle color when thermostat is not actively heating/cooling ([484fef9](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/484fef93c569eb344c1dda4cec3bccd92005ade6))
+
 # [1.7.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.6.2...v1.7.0) (2026-01-29)
 
 
