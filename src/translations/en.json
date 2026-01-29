@@ -10,6 +10,8 @@
       "conditions": "Conditions",
       "pid_controller": "PID Controller",
       "control_output": "Control Output",
+      "pid_history": "PID History",
+      "time": "Time",
       "learning": "Learning",
       "learning_status": "Status",
       "cycles_collected": "Cycles Collected",

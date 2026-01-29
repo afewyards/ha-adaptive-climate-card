@@ -9,6 +9,14 @@ import {
   ADAPTIVE_CONDITION_COLORS,
 } from "./utils";
 
+interface PidHistoryEntry {
+  timestamp: string;
+  kp: number;
+  ki: number;
+  kd: number;
+  reason: string;
+}
+
 interface AdaptiveAttributes {
   // Status object contains conditions and night setback info
   status?: {
@@ -21,6 +29,8 @@ interface AdaptiveAttributes {
   ki?: number;
   kd?: number;
   control_output?: number;
+  // PID history
+  pid_history?: PidHistoryEntry[];
   // Learning values are flat on attributes
   learning_status?: string;
   cycles_collected?: number;
@@ -62,6 +72,7 @@ export class ClimateInfoPopup extends LitElement {
           <div class="content">
             ${this._renderStatusSection(attrs, customLocalize)}
             ${this._renderPidSection(attrs, customLocalize)}
+            ${this._renderPidHistorySection(attrs, customLocalize)}
             ${this._renderLearningSection(attrs, customLocalize)}
             ${this._renderNightSetbackSection(attrs, customLocalize)}
             ${this._renderEnvironmentSection(attrs, customLocalize)}
@@ -166,6 +177,41 @@ export class ClimateInfoPopup extends LitElement {
               </div>
             `
           : nothing}
+      </section>
+    `;
+  }
+
+  private _renderPidHistorySection(
+    attrs: AdaptiveAttributes,
+    localize: ReturnType<typeof setupCustomlocalize>
+  ): TemplateResult | typeof nothing {
+    const history = attrs.pid_history;
+    if (!history || history.length === 0) {
+      return nothing;
+    }
+
+    return html`
+      <section>
+        <h3>${localize("card.info_popup.pid_history")}</h3>
+        <div class="history-table">
+          <div class="history-header">
+            <span>${localize("card.info_popup.time")}</span>
+            <span>Kp</span>
+            <span>Ki</span>
+            <span>Kd</span>
+          </div>
+          ${history.slice(-5).reverse().map(
+            (entry) => html`
+              <div class="history-row">
+                <span class="history-time">${this._formatDateTime(entry.timestamp)}</span>
+                <span>${this._formatNumber(entry.kp)}</span>
+                <span>${this._formatNumber(entry.ki, 4)}</span>
+                <span>${this._formatNumber(entry.kd)}</span>
+              </div>
+              <div class="history-reason">${entry.reason}</div>
+            `
+          )}
+        </div>
       </section>
     `;
   }
@@ -287,10 +333,24 @@ export class ClimateInfoPopup extends LitElement {
     `;
   }
 
-  private _formatNumber(value: number): string {
+  private _formatNumber(value: number, decimals: number = 2): string {
     return value.toLocaleString(this.hass?.locale?.language ?? "en", {
-      maximumFractionDigits: 2,
+      maximumFractionDigits: decimals,
     });
+  }
+
+  private _formatDateTime(isoString: string): string {
+    try {
+      const date = new Date(isoString);
+      return date.toLocaleString(this.hass?.locale?.language ?? "en", {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return isoString;
+    }
   }
 
   private _formatTime(isoString: string): string {
@@ -429,6 +489,53 @@ export class ClimateInfoPopup extends LitElement {
 
       .condition-badge ha-icon {
         --mdc-icon-size: 14px;
+      }
+
+      .history-table {
+        font-size: 12px;
+      }
+
+      .history-header {
+        display: grid;
+        grid-template-columns: 1fr repeat(3, 50px);
+        gap: 8px;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.12));
+        color: var(--secondary-text-color);
+        font-weight: 500;
+        text-align: right;
+      }
+
+      .history-header span:first-child {
+        text-align: left;
+      }
+
+      .history-row {
+        display: grid;
+        grid-template-columns: 1fr repeat(3, 50px);
+        gap: 8px;
+        padding: 6px 0 2px;
+        color: var(--primary-text-color);
+        text-align: right;
+      }
+
+      .history-row span:first-child {
+        text-align: left;
+      }
+
+      .history-time {
+        color: var(--secondary-text-color);
+      }
+
+      .history-reason {
+        padding: 0 0 6px;
+        color: var(--secondary-text-color);
+        font-style: italic;
+        border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.06));
+      }
+
+      .history-reason:last-child {
+        border-bottom: none;
       }
 
       /* Dark mode adjustments handled by HA theme variables */
