@@ -111,7 +111,8 @@ export class ClimateCard
     ) {
       controls.push("temperature_control");
     }
-    if (isHvacModesVisible(stateObj, this._config.hvac_modes)) {
+    const autoModeSwitching = (stateObj.attributes as any).auto_mode_switching_enabled;
+    if (isHvacModesVisible(stateObj, this._config.hvac_modes) && !autoModeSwitching) {
       controls.push("hvac_mode_control");
     }
     return controls;
