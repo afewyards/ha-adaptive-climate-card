@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.7.1...v1.8.0) (2026-01-29)
+
+
+### Features
+
+* show PID history in info modal ([ef6ca65](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/ef6ca65f1197d5c1e79ef5144f71b0ea82d44910))
+
 ## [1.7.1](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.7.0...v1.7.1) (2026-01-29)
 
 
