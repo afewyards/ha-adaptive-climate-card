@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.8.0...v1.9.0) (2026-01-29)
+
+
+### Features
+
+* dim card content and strikethrough target temp when off ([55ccd6f](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/55ccd6f718142ae301227e089b3256da17e3b081))
+
 # [1.8.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.7.1...v1.8.0) (2026-01-29)
 
 
