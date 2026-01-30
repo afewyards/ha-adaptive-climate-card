@@ -79,6 +79,7 @@ export class ClimateInfoPopup extends LitElement {
             ${this._renderNightSetbackSection(attrs, customLocalize)}
             ${this._renderEnvironmentSection(attrs, customLocalize)}
             ${this._renderStatisticsSection(attrs, customLocalize)}
+            ${this._renderPidHistorySection(attrs, customLocalize)}
           </div>
         </div>
       </div>
@@ -331,6 +332,67 @@ export class ClimateInfoPopup extends LitElement {
               </div>
             `
           : nothing}
+      </section>
+    `;
+  }
+
+private _renderPidHistorySection(
+    attrs: AdaptiveAttributes,
+    localize: ReturnType<typeof setupCustomlocalize>
+  ): TemplateResult | typeof nothing {
+    if (!attrs.pid_history || attrs.pid_history.length === 0) {
+      return nothing;
+    }
+
+    return html`
+      <section>
+        <h3>${localize("card.info_popup.pid_history")}</h3>
+        ${attrs.pid_history.map(
+          (entry, index) => html`
+            <div class="history-entry">
+              <div class="history-entry-header">
+                <span class="value">${this._formatRelativeTime(entry.timestamp)}</span>
+                <div class="history-actions">
+                  <button
+                    class="history-btn"
+                    @click=${() => this._restorePidHistory(index)}
+                    title=${localize("card.info_popup.restore")}
+                  >
+                    ↺
+                  </button>
+                  <button
+                    class="history-btn"
+                    @click=${() => this._deletePidHistory(index)}
+                    title=${localize("card.info_popup.delete")}
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+              <div class="history-gains">
+                <div class="row">
+                  <span class="label">Kp</span>
+                  <span class="value">${this._formatNumber(entry.kp)}</span>
+                </div>
+                <div class="row">
+                  <span class="label">Ki</span>
+                  <span class="value">${this._formatNumber(entry.ki, 4)}</span>
+                </div>
+                <div class="row">
+                  <span class="label">Kd</span>
+                  <span class="value">${this._formatNumber(entry.kd)}</span>
+                </div>
+                <div class="row">
+                  <span class="label">Ke</span>
+                  <span class="value">${this._formatNumber(entry.ke)}</span>
+                </div>
+              </div>
+              <div class="history-meta">
+                ${entry.reason} • ${entry.actor}
+              </div>
+            </div>
+          `
+        )}
       </section>
     `;
   }
