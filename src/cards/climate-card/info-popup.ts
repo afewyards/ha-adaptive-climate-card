@@ -392,6 +392,34 @@ export class ClimateInfoPopup extends LitElement {
     }
   }
 
+  private async _restorePidHistory(index: number): Promise<void> {
+    const customLocalize = setupCustomlocalize(this.hass);
+    const confirmMessage = customLocalize("card.info_popup.confirm_restore");
+
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    await this.hass.callService("adaptive_thermostat", "restore_pid_history", {
+      entity_id: this.entity.entity_id,
+      index,
+    });
+  }
+
+  private async _deletePidHistory(index: number): Promise<void> {
+    const customLocalize = setupCustomlocalize(this.hass);
+    const confirmMessage = customLocalize("card.info_popup.confirm_delete");
+
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    await this.hass.callService("adaptive_thermostat", "delete_pid_history", {
+      entity_id: this.entity.entity_id,
+      indices: [index],
+    });
+  }
+
   static get styles(): CSSResultGroup {
     return css`
       .overlay {
