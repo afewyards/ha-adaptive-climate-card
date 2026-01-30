@@ -86,7 +86,13 @@ export class ClimateInfoPopup extends LitElement {
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult {
-    const conditions = attrs.status?.conditions ?? [];
+    const conditions = [...(attrs.status?.conditions ?? [])];
+    // Add learning status condition
+    if (attrs.learning_status === "collecting") {
+      conditions.push("learning");
+    } else if (attrs.learning_status === "stable") {
+      conditions.push("stable");
+    }
     const state = this.entity.state;
     const hvacAction = this.entity.attributes.hvac_action;
 

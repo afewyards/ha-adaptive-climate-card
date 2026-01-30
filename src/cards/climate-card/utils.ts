@@ -60,7 +60,8 @@ export const ADAPTIVE_CONDITION_ICONS: Record<string, string> = {
   humidity_spike: "mdi:shower",
   night_setback: "mdi:weather-night",
   open_window: "mdi:window-open-variant",
-  learning_grace: "mdi:brain",
+  learning: "mdi:brain",
+  stable: "mdi:target-account",
 };
 
 // Adaptive condition colors (subtle, not too prominent)
@@ -69,11 +70,12 @@ export const ADAPTIVE_CONDITION_COLORS: Record<string, string> = {
   humidity_spike: "var(--rgb-blue)",
   night_setback: "var(--rgb-purple)",
   open_window: "var(--rgb-amber)",
-  learning_grace: "var(--rgb-green)",
+  learning: "var(--rgb-green)",
+  stable: "var(--rgb-green)",
 };
 
 // Priority order for conditions (first match wins)
-const CONDITION_PRIORITY = ["contact_open", "open_window", "humidity_spike", "night_setback", "learning_grace"];
+const CONDITION_PRIORITY = ["contact_open", "open_window", "humidity_spike", "night_setback", "learning", "stable"];
 
 export function getAdaptiveConditionIcon(conditions: string[]): string | undefined {
   for (const cond of CONDITION_PRIORITY) {

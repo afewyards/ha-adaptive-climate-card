@@ -287,10 +287,18 @@ export class ClimateCard
   }
 
   renderAdaptiveBadge(entity: ClimateEntity) {
-    // Get status.conditions from entity attributes
-    const status = (entity.attributes as any).status as { conditions?: string[] } | undefined;
-    const conditions = status?.conditions ?? [];
+    // Get status.conditions and learning_status from entity attributes
+    const attrs = entity.attributes as any;
+    const status = attrs.status as { conditions?: string[] } | undefined;
+    const conditions = [...(status?.conditions ?? [])];
     const presetMode = entity.attributes.preset_mode;
+
+    // Add learning status condition
+    if (attrs.learning_status === "collecting") {
+      conditions.push("learning");
+    } else if (attrs.learning_status === "stable") {
+      conditions.push("stable");
+    }
 
     // Check away/vacation mode
     if (isAwayMode(presetMode)) {
