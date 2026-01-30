@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.10.1...v1.10.2) (2026-01-30)
+
+
+### Bug Fixes
+
+* **info-popup:** reverse PID history order and condense layout ([70a88f3](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/70a88f304489b4bd949b72e9fcc7faa477ecb75f))
+
 ## [1.10.1](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.10.0...v1.10.1) (2026-01-30)
 
 
