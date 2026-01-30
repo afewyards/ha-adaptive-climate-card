@@ -1,3 +1,10 @@
+## [1.10.3](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.10.2...v1.10.3) (2026-01-30)
+
+
+### Bug Fixes
+
+* **info-popup:** derive PID values from latest history entry ([67c5e1d](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/67c5e1d58606e2b1c343a1eafb57be47bb83a893))
+
 ## [1.10.2](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.10.1...v1.10.2) (2026-01-30)
 
 
