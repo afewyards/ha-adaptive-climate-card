@@ -14,7 +14,9 @@ interface PidHistoryEntry {
   kp: number;
   ki: number;
   kd: number;
+  ke: number;
   reason: string;
+  actor: string;
 }
 
 interface AdaptiveAttributes {
