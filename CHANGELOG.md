@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.10.3...v1.11.0) (2026-01-30)
+
+
+### Features
+
+* **badge:** show learning status badges instead of learning_grace ([9406b24](https://github.com/afewyards/ha-adaptive-thermostat-card/commit/9406b24c7b114f7daf2b7389d02ec748d7e4b17f))
+
 ## [1.10.3](https://github.com/afewyards/ha-adaptive-thermostat-card/compare/v1.10.2...v1.10.3) (2026-01-30)
 
 
