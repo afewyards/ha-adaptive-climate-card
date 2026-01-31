@@ -294,10 +294,14 @@ export class ClimateCard
     const presetMode = entity.attributes.preset_mode;
 
     // Add learning status condition
-    if (attrs.learning_status === "collecting") {
-      conditions.push("learning");
-    } else if (attrs.learning_status === "stable") {
-      conditions.push("stable");
+    switch (attrs.learning_status) {
+      case "collecting":
+        conditions.push("learning");
+        break;
+      case "stable":
+      case "tuned":
+        conditions.push("stable");
+        break;
     }
 
     // Check away/vacation mode

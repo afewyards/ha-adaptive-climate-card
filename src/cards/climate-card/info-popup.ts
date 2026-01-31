@@ -88,10 +88,14 @@ export class ClimateInfoPopup extends LitElement {
   ): TemplateResult {
     const conditions = [...(attrs.status?.conditions ?? [])];
     // Add learning status condition
-    if (attrs.learning_status === "collecting") {
-      conditions.push("learning");
-    } else if (attrs.learning_status === "stable") {
-      conditions.push("stable");
+    switch (attrs.learning_status) {
+      case "collecting":
+        conditions.push("learning");
+        break;
+      case "stable":
+      case "tuned":
+        conditions.push("stable");
+        break;
     }
     const state = this.entity.state;
     const hvacAction = this.entity.attributes.hvac_action;
