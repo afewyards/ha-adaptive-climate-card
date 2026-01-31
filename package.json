@@ -1,7 +1,7 @@
 {
-  "name": "adaptive-thermostat-card",
+  "name": "adaptive-climate-card",
   "version": "1.11.0",
-  "description": "Adaptive Thermostat Card for Home Assistant",
+  "description": "Adaptive Climate Card for Home Assistant",
   "main": "index.js",
   "scripts": {
     "start": "rollup -c --watch --bundleConfigAsCjs",
@@ -18,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/afewyards/ha-adaptive-thermostat-card"
+    "url": "https://github.com/afewyards/ha-adaptive-climate-card"
   },
   "license": "Apache-2.0",
   "dependencies": {

@@ -1,7 +1,7 @@
 {
   "card": {
     "not_found": "Entity not found",
-    "invalid_integration": "This card only works with Adaptive Thermostat entities",
+    "invalid_integration": "This card only works with Adaptive Climate entities",
     "info_popup": {
       "title": "Thermostat Info",
       "status": "Status",

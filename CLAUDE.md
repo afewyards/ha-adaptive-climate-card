@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Home Assistant Lovelace custom card for the Adaptive Thermostat integration. Built with Lit 3.x web components and TypeScript. Based on lovelace-mushroom by piitaya.
+Home Assistant Lovelace custom card for the Adaptive Climate integration. Built with Lit 3.x web components and TypeScript. Based on lovelace-mushroom by piitaya.
 
 Features: temperature control, HVAC mode selection, adaptive condition badges (window/contact open, humidity pause, night setback, learning mode, away/vacation), color-coded circle (red=heating, blue=cooling).
 
@@ -12,7 +12,7 @@ Features: temperature control, HVAC mode selection, adaptive condition badges (w
 
 ```bash
 npm run start          # Dev server (watch + serve on port 4000)
-npm run build          # Production build to dist/adaptive-thermostat-card.js
+npm run build          # Production build to dist/adaptive-climate-card.js
 npm run format         # Prettier formatting
 
 # Local HA testing (Docker)
@@ -42,7 +42,7 @@ src/
 └── translations/            # 33 language JSON files
 ```
 
-Build outputs single bundle: `dist/adaptive-thermostat-card.js`
+Build outputs single bundle: `dist/adaptive-climate-card.js`
 
 ## Key Patterns
 
@@ -52,7 +52,7 @@ Build outputs single bundle: `dist/adaptive-thermostat-card.js`
 - **CSS**: Lit `css\`\`` tagged templates
 - **i18n**: Translation files in `src/translations/`, loaded via `localize.ts`
 
-## Adaptive Thermostat Logic
+## Adaptive Climate Logic
 
 Condition priority in `cards/climate-card/utils.ts`:
 1. contact_open

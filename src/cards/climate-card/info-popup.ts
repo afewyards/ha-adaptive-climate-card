@@ -411,7 +411,7 @@ private _renderPidHistorySection(
       return;
     }
 
-    await this.hass.callService("adaptive_thermostat", "restore_pid_history", {
+    await this.hass.callService("adaptive_climate", "restore_pid_history", {
       entity_id: this.entity.entity_id,
       index,
     });
@@ -425,7 +425,7 @@ private _renderPidHistorySection(
       return;
     }
 
-    await this.hass.callService("adaptive_thermostat", "delete_pid_history", {
+    await this.hass.callService("adaptive_climate", "delete_pid_history", {
       entity_id: this.entity.entity_id,
       indices: [index],
     });

@@ -68,8 +68,8 @@ const CONTROLS_ICONS: Record<ClimateCardControl, string> = {
 
 registerCustomCard({
   type: CLIMATE_CARD_NAME,
-  name: "Adaptive Thermostat Card",
-  description: "Card for Adaptive Thermostat",
+  name: "Adaptive Climate Card",
+  description: "Card for Adaptive Climate",
 });
 
 @safeCustomElement(CLIMATE_CARD_NAME)

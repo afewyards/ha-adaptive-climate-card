@@ -56,7 +56,7 @@ export default [
       dir: "dist",
       format: "es",
       inlineDynamicImports: true,
-      entryFileNames: "adaptive-thermostat-card.js",
+      entryFileNames: "adaptive-climate-card.js",
     },
     plugins,
     moduleContext: (id) => {

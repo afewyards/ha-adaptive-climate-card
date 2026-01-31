@@ -100,7 +100,7 @@ export function isAwayMode(presetMode: string | undefined): boolean {
   return presetMode === "away" || presetMode === "vacation";
 }
 
-// Check if entity is from adaptive_thermostat integration
+// Check if entity is from adaptive_climate integration
 export function isAdaptiveThermostat(entity: any): boolean {
-  return entity.attributes?.integration === "adaptive_thermostat";
+  return entity.attributes?.integration === "adaptive_climate";
 }

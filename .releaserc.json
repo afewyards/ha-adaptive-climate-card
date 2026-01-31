@@ -15,7 +15,7 @@
     }],
     ["@semantic-release/github", {
       "assets": [
-        {"path": "dist/adaptive-thermostat-card.js", "label": "adaptive-thermostat-card.js"}
+        {"path": "dist/adaptive-climate-card.js", "label": "adaptive-climate-card.js"}
       ]
     }]
   ]
