@@ -9,6 +9,7 @@ import {
   UNIT_F,
 } from "../../../ha";
 import { safeCustomElement } from "../../../utils/safe-custom-element";
+import { AdaptiveAttributes, getNightSetback } from "../adaptive-attributes";
 import "../../../shared/button";
 import "../../../shared/button-group";
 import "../../../shared/input-number";
@@ -65,13 +66,14 @@ export class ClimateTemperatureControl extends LitElement {
     nightTarget: number | null;
     daytimeTarget: number | null;
   } {
-    const status = (this.entity.attributes as any).status;
-    if (status?.conditions?.includes("night_setback") && status.setback_delta != null) {
+    const attrs = this.entity.attributes as AdaptiveAttributes;
+    const nightSetback = getNightSetback(attrs);
+    if (nightSetback?.delta != null) {
       const daytimeTarget = this.entity.attributes.temperature;
       if (daytimeTarget != null) {
         return {
           active: true,
-          nightTarget: daytimeTarget - status.setback_delta,
+          nightTarget: daytimeTarget - nightSetback.delta,
           daytimeTarget: daytimeTarget,
         };
       }
