@@ -58,6 +58,11 @@ import {
   isAwayMode,
   isAdaptiveThermostat,
 } from "./utils";
+import {
+  AdaptiveAttributes,
+  getConditions,
+  getLearningStatus,
+} from "./adaptive-attributes";
 
 type ClimateCardControl = "temperature_control" | "hvac_mode_control";
 
@@ -287,14 +292,14 @@ export class ClimateCard
   }
 
   renderAdaptiveBadge(entity: ClimateEntity) {
-    // Get status.conditions and learning_status from entity attributes
-    const attrs = entity.attributes as any;
-    const status = attrs.status as { conditions?: string[] } | undefined;
-    const conditions = [...(status?.conditions ?? [])];
+    // Get conditions and learning_status from entity attributes
+    const attrs = entity.attributes as AdaptiveAttributes;
+    const conditions = [...getConditions(attrs)];
     const presetMode = entity.attributes.preset_mode;
 
     // Add learning status condition
-    switch (attrs.learning_status) {
+    const learningStatus = getLearningStatus(attrs);
+    switch (learningStatus) {
       case "collecting":
         conditions.push("learning");
         break;

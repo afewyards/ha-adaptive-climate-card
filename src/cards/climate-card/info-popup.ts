@@ -8,37 +8,15 @@ import {
   ADAPTIVE_CONDITION_ICONS,
   ADAPTIVE_CONDITION_COLORS,
 } from "./utils";
-
-interface PidHistoryEntry {
-  timestamp: string;
-  kp: number;
-  ki: number;
-  kd: number;
-  ke: number;
-  reason: string;
-  actor: string;
-}
-
-interface AdaptiveAttributes {
-  // Status object contains conditions and night setback info
-  status?: {
-    conditions?: string[];
-    setback_delta?: number;
-    setback_end?: string;
-  };
-  // Control output (live value)
-  control_output?: number;
-  // PID history (current gains are derived from latest entry)
-  pid_history?: PidHistoryEntry[];
-  // Learning values are flat on attributes
-  learning_status?: string;
-  cycles_collected?: number;
-  convergence_confidence_pct?: number;
-  // Environment and statistics
-  outdoor_temp_lagged?: number;
-  heater_cycle_count?: number;
-  cooler_cycle_count?: number;
-}
+import {
+  AdaptiveAttributes,
+  getConditions,
+  getLearningStatus,
+  getLearningConfidence,
+  getPidHistory,
+  getCycleCounts,
+  getNightSetback,
+} from "./adaptive-attributes";
 
 @safeCustomElement("adaptive-climate-info-popup")
 export class ClimateInfoPopup extends LitElement {
@@ -86,9 +64,10 @@ export class ClimateInfoPopup extends LitElement {
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult {
-    const conditions = [...(attrs.status?.conditions ?? [])];
+    const conditions = [...getConditions(attrs)];
     // Add learning status condition
-    switch (attrs.learning_status) {
+    const learningStatus = getLearningStatus(attrs);
+    switch (learningStatus) {
       case "collecting":
         conditions.push("learning");
         break;
@@ -148,7 +127,8 @@ export class ClimateInfoPopup extends LitElement {
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult | typeof nothing {
     // Get current PID values from latest history entry
-    const latest = attrs.pid_history?.[attrs.pid_history.length - 1];
+    const pidHistory = getPidHistory(attrs);
+    const latest = pidHistory?.[pidHistory.length - 1];
 
     if (!latest && attrs.control_output === undefined) {
       return nothing;
@@ -193,14 +173,17 @@ export class ClimateInfoPopup extends LitElement {
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult | typeof nothing {
-    if (!attrs.learning_status) return nothing;
+    const learningStatus = getLearningStatus(attrs);
+    const learningConfidence = getLearningConfidence(attrs);
+
+    if (!learningStatus) return nothing;
 
     return html`
       <section>
         <h3>${localize("card.info_popup.learning")}</h3>
         <div class="row">
           <span class="label">${localize("card.info_popup.learning_status")}</span>
-          <span class="value">${attrs.learning_status}</span>
+          <span class="value">${learningStatus}</span>
         </div>
         ${attrs.cycles_collected !== undefined
           ? html`
@@ -210,11 +193,11 @@ export class ClimateInfoPopup extends LitElement {
               </div>
             `
           : nothing}
-        ${attrs.convergence_confidence_pct !== undefined
+        ${learningConfidence !== undefined
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.convergence")}</span>
-                <span class="value">${attrs.convergence_confidence_pct}%</span>
+                <span class="value">${learningConfidence}%</span>
               </div>
             `
           : nothing}
@@ -226,8 +209,8 @@ export class ClimateInfoPopup extends LitElement {
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult | typeof nothing {
-    const status = attrs.status;
-    const conditions = status?.conditions ?? [];
+    const conditions = getConditions(attrs);
+    const nightSetback = getNightSetback(attrs);
 
     // Only show when night setback is active
     if (!conditions.includes("night_setback")) return nothing;
@@ -235,19 +218,19 @@ export class ClimateInfoPopup extends LitElement {
     return html`
       <section>
         <h3>${localize("card.info_popup.night_setback")}</h3>
-        ${status?.setback_delta !== undefined
+        ${nightSetback?.delta !== undefined
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.setback_delta")}</span>
-                <span class="value">${status.setback_delta}°</span>
+                <span class="value">${nightSetback.delta}°</span>
               </div>
             `
           : nothing}
-        ${status?.setback_end
+        ${nightSetback?.ends_at
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.setback_end")}</span>
-                <span class="value">${this._formatTime(status.setback_end)}</span>
+                <span class="value">${this._formatTime(nightSetback.ends_at)}</span>
               </div>
             `
           : nothing}
@@ -276,9 +259,11 @@ export class ClimateInfoPopup extends LitElement {
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult | typeof nothing {
+    const cycleCounts = getCycleCounts(attrs);
+
     if (
-      attrs.heater_cycle_count === undefined &&
-      attrs.cooler_cycle_count === undefined
+      cycleCounts.heater === undefined &&
+      cycleCounts.cooler === undefined
     ) {
       return nothing;
     }
@@ -286,19 +271,19 @@ export class ClimateInfoPopup extends LitElement {
     return html`
       <section>
         <h3>${localize("card.info_popup.statistics")}</h3>
-        ${attrs.heater_cycle_count !== undefined
+        ${cycleCounts.heater !== undefined
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.heater_cycles")}</span>
-                <span class="value">${attrs.heater_cycle_count}</span>
+                <span class="value">${cycleCounts.heater}</span>
               </div>
             `
           : nothing}
-        ${attrs.cooler_cycle_count !== undefined
+        ${cycleCounts.cooler !== undefined
           ? html`
               <div class="row">
                 <span class="label">${localize("card.info_popup.cooler_cycles")}</span>
-                <span class="value">${attrs.cooler_cycle_count}</span>
+                <span class="value">${cycleCounts.cooler}</span>
               </div>
             `
           : nothing}
@@ -310,12 +295,13 @@ private _renderPidHistorySection(
     attrs: AdaptiveAttributes,
     localize: ReturnType<typeof setupCustomlocalize>
   ): TemplateResult | typeof nothing {
-    if (!attrs.pid_history || attrs.pid_history.length === 0) {
+    const pidHistory = getPidHistory(attrs);
+    if (!pidHistory || pidHistory.length === 0) {
       return nothing;
     }
 
     // Reverse to show newest first, but track original index for service calls
-    const reversedHistory = [...attrs.pid_history].map((entry, idx) => ({ entry, originalIndex: idx })).reverse();
+    const reversedHistory = [...pidHistory].map((entry, idx) => ({ entry, originalIndex: idx })).reverse();
 
     return html`
       <section>
