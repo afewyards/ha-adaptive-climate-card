@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/afewyards/ha-adaptive-climate-card/compare/v2.3.0...v2.4.0) (2026-02-01)
+
+
+### Features
+
+* support new nested attribute structure from backend ([80c8ca7](https://github.com/afewyards/ha-adaptive-climate-card/commit/80c8ca7e0989f5017266f30baf0daebc9cd50bf8))
+
 # [2.3.0](https://github.com/afewyards/ha-adaptive-climate-card/compare/v2.2.0...v2.3.0) (2026-01-31)
 
 
