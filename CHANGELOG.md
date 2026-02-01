@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/afewyards/ha-adaptive-climate-card/compare/v2.4.0...v2.4.1) (2026-02-01)
+
+
+### Bug Fixes
+
+* use new attribute structure for night setback temp display ([737bd77](https://github.com/afewyards/ha-adaptive-climate-card/commit/737bd77b64bfd1e1f280f43c66a7a75a1903f49e))
+
 # [2.4.0](https://github.com/afewyards/ha-adaptive-climate-card/compare/v2.3.0...v2.4.0) (2026-02-01)
 
 
