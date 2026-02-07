@@ -336,7 +336,8 @@ private _renderPidHistorySection(
     `;
   }
 
-  private _formatNumber(value: number, decimals: number = 2): string {
+  private _formatNumber(value: number | null | undefined, decimals: number = 2): string {
+    if (value == null) return "—";
     return value.toLocaleString(this.hass?.locale?.language ?? "en", {
       maximumFractionDigits: decimals,
     });
