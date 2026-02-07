@@ -1,3 +1,10 @@
+## [2.4.2](https://github.com/afewyards/ha-adaptive-climate-card/compare/v2.4.1...v2.4.2) (2026-02-07)
+
+
+### Bug Fixes
+
+* move pid_history from learning object to root attribute ([0a519a7](https://github.com/afewyards/ha-adaptive-climate-card/commit/0a519a7cd7d32d474a443ac23655cf5788ca44a4))
+
 ## [2.4.1](https://github.com/afewyards/ha-adaptive-climate-card/compare/v2.4.0...v2.4.1) (2026-02-01)
 
 
