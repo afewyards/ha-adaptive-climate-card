@@ -1,3 +1,10 @@
+## [2.4.3](https://github.com/afewyards/ha-adaptive-climate-card/compare/v2.4.2...v2.4.3) (2026-02-07)
+
+
+### Bug Fixes
+
+* handle null outdoor_temp_lagged in info popup ([c017a1c](https://github.com/afewyards/ha-adaptive-climate-card/commit/c017a1ced19bf04bc40dc18cf9c95263cabdcac5))
+
 ## [2.4.2](https://github.com/afewyards/ha-adaptive-climate-card/compare/v2.4.1...v2.4.2) (2026-02-07)
 
 
