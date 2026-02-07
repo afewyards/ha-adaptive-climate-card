@@ -1,6 +1,6 @@
 {
   "name": "adaptive-climate-card",
-  "version": "2.4.3",
+  "version": "0.1.0",
   "description": "Adaptive Climate Card for Home Assistant",
   "main": "index.js",
   "scripts": {
