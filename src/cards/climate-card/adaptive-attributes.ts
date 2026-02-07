@@ -13,7 +13,6 @@ export interface PidHistoryEntry {
 export interface LearningObject {
   status?: string;
   confidence?: number;
-  pid_history?: PidHistoryEntry[];
 }
 
 export interface Override {
@@ -40,12 +39,12 @@ export interface StatusObject {
 export interface AdaptiveAttributes {
   status?: StatusObject;
   learning?: LearningObject;
+  pid_history?: PidHistoryEntry[];
   cycle_count?: number | { heater: number; cooler: number };
   control_output?: number;
   outdoor_temp_lagged?: number;
   // Flat attributes for backwards compatibility
   learning_status?: string;
-  pid_history?: PidHistoryEntry[];
   convergence_confidence_pct?: number;
   heater_cycle_count?: number;
   cooler_cycle_count?: number;
@@ -75,7 +74,7 @@ export function getLearningConfidence(attrs: AdaptiveAttributes): number | undef
 }
 
 export function getPidHistory(attrs: AdaptiveAttributes): PidHistoryEntry[] | undefined {
-  return attrs.learning?.pid_history ?? attrs.pid_history;
+  return attrs.pid_history;
 }
 
 export function getCycleCounts(attrs: AdaptiveAttributes): { heater?: number; cooler?: number } {
