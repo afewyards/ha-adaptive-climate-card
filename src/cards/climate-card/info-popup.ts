@@ -327,7 +327,7 @@ private _renderPidHistorySection(
                 </div>
               </div>
               <div class="history-meta">
-                ${this._formatRelativeTime(entry.timestamp)} · ${entry.reason}
+                ${entry.mode ? html`<span class="history-mode history-mode-${entry.mode}">${entry.mode}</span> · ` : nothing}${this._formatRelativeTime(entry.timestamp)} · ${entry.reason}
               </div>
             </div>
           `
@@ -606,6 +606,24 @@ private _renderPidHistorySection(
         font-size: 11px;
         color: var(--secondary-text-color);
         margin-top: 2px;
+      }
+
+      .history-mode {
+        font-size: 10px;
+        font-weight: 500;
+        padding: 1px 4px;
+        border-radius: 3px;
+        text-transform: uppercase;
+      }
+
+      .history-mode-heating {
+        background-color: rgba(255, 87, 34, 0.15);
+        color: var(--state-climate-heat-color, #ff5722);
+      }
+
+      .history-mode-cooling {
+        background-color: rgba(33, 150, 243, 0.15);
+        color: var(--state-climate-cool-color, #2196f3);
       }
 
       /* Dark mode adjustments handled by HA theme variables */

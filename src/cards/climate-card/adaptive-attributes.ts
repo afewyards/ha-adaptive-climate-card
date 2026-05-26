@@ -7,7 +7,8 @@ export interface PidHistoryEntry {
   kd: number;
   ke: number;
   reason: string;
-  actor: string;
+  actor?: string;
+  mode?: "heating" | "cooling";
 }
 
 export interface LearningObject {
@@ -36,10 +37,15 @@ export interface StatusObject {
   overrides?: Override[];
 }
 
+// pid_history can be flat array (legacy) or mode-keyed dict (v2)
+export type PidHistoryRaw =
+  | PidHistoryEntry[]
+  | { heating?: PidHistoryEntry[]; cooling?: PidHistoryEntry[] };
+
 export interface AdaptiveAttributes {
   status?: StatusObject;
   learning?: LearningObject;
-  pid_history?: PidHistoryEntry[];
+  pid_history?: PidHistoryRaw;
   cycle_count?: number | { heater: number; cooler: number };
   control_output?: number;
   outdoor_temp_lagged?: number;
@@ -74,7 +80,24 @@ export function getLearningConfidence(attrs: AdaptiveAttributes): number | undef
 }
 
 export function getPidHistory(attrs: AdaptiveAttributes): PidHistoryEntry[] | undefined {
-  return attrs.pid_history;
+  const raw = attrs.pid_history;
+  if (!raw) return undefined;
+
+  // Legacy flat array format
+  if (Array.isArray(raw)) {
+    return raw;
+  }
+
+  // New mode-keyed dict format: combine heating + cooling with mode labels
+  const heating = (raw.heating ?? []).map(e => ({ ...e, mode: "heating" as const }));
+  const cooling = (raw.cooling ?? []).map(e => ({ ...e, mode: "cooling" as const }));
+
+  // Interleave by timestamp (newest first after reversing in UI)
+  const combined = [...heating, ...cooling].sort(
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+  );
+
+  return combined.length > 0 ? combined : undefined;
 }
 
 export function getCycleCounts(attrs: AdaptiveAttributes): { heater?: number; cooler?: number } {
